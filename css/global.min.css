@@ -1,0 +1,16 @@
+.top-navigation{position:fixed;width:100%;z-index:1;border-bottom:1px solid #FF1493;font-size:15px}
+.top-navigation ul{font-weight:400 !important;list-style-type:none;text-align:left;padding:0;margin:0;display:flex;align-items:center} 
+.tborder{border:0px solid transparent !important}
+.tborder{border:0px solid transparent !important;border:0px solid transparent !important}
+.top-navigation ul li{display:inline-flex;padding:0px 25px;align-items:center}
+.top-navigation ul li a{color:#FF1493 !important}
+.top-navigation .wrapper{padding:0px;display:flex;align-items:center}
+body{background:#121212;color:#AAA;margin:0;overflow-y:scroll;overflow-x:hidden;font-family:Courier New;text-decoration:none;font-size:13px/*Ignored param*/}
+.wrapper{width:130% !important;margin-left:auto;margin-right:auto;padding:0px;border-top:0px;display:table}
+.top-navigation .wrapper{width:97% !important}
+.theme-color{color:#FF1493}
+.theme-background{background:#008080}
+a{text-decoration:none}
+.scrollbar{margin-left:30px;float:left;height:300px;width:65px;background:#191919;overflow-y:scroll;margin-bottom:25px}::-webkit-scrollbar-track{border-radius:10px;background-color:#000}::-webkit-scrollbar{width:12px;background-color:#191919}::-webkit-scrollbar-thumb{border-radius:5px;background-color:#282828}
+.footer{font-size:15px;font-family:Courier New;box-sizing:border-box;display:flex;padding:1px;float:left;margin-top:3em;margin-left:3em;margin-right:5em;margin-bottom:2em}
+#mobile_navigation{width:100%;color:#FFF;padding:13px;display:none;font-size:14px}#mobile_navigation a{color:white}

@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html>
+<head>
+<script>
+		var txt="Rootcon CTF 2023 Pre Qualifiers - Bin4cry";
+		var speed=500;
+		var refresh=null;
+		function action() { document.title=txt;
+		txt=txt.substring(1,txt.length)+txt.charAt(0);
+		refresh=setTimeout("action()",speed);}action();
+</script>
+
+<style>
+
+a:link {
+  color: red;
+  background-color: transparent;
+  text-decoration: none;
+}
+
+a:visited {
+  color: pink;
+  background-color: transparent;
+  text-decoration: none;
+}
+
+a:hover {
+  color: green;
+  background-color: transparent;
+  text-decoration: underline;
+}
+
+a:active {
+  color: yellow;
+  background-color: transparent;
+  text-decoration: underline;
+}
+
+</style>
+
+<link href="https://blogfonts.com/css/aWQ9MzM0OTYmc3ViPTQ5NiZjPWMmdHRmPUN5YmVydmVyc2UrQm9sZCtJdGFsaWMub3RmJm49Y3liZXJ2ZXJzZQ/Cyberverse.otf" rel="stylesheet" type="text/css"/>
+<link rel="icon" href="picture/avatar.ico">
+<link type="text/css" rel="stylesheet" href="css/global.min.css" />
+
+</head>
+<body>
+
+
+
+<center>
+<h1><b>Bin4Cry - iWantGroot</b></h1>
+This post will focus on my approach to the Bin4Cry challenge, which is worth 100 points.<br>
+
+<br>
+
+Note: The file below contain <font color="#d10b0b"> real malware</font> and must only be executed
+inside a vm!.
+
+<br>
+<br>
+
+Upon viewing the challenge page, we have this file called 
+<font color="#d10b0b"><a href="https://cdn.discordapp.com/attachments/990557730194489345/1153425192564031589/i_want_groot.zip">i_want_groot.exe</a></font> and is an elf file which means
+we can only run this on linux.
+
+
+
+<br>
+<br>
+
+To run the file on linux, first we have to make the file itself executable by executing
+<br>
+<code>
+<i>
+<font color="white">
+chmod +x ./i_want_groot	
+</font>
+</i>
+</code>
+
+<br>
+
+command on linux.
+
+<br>
+<br>
+
+<img src="picture/iWantGroot.png" width="851" height="480">
+<br>
+<br>
+
+Now, the program is asking for root permission which is really suspicious thus i decided to load
+the program into a disassembler called ida pro.<br>
+
+After loading it into a disassembler, i looked for the main function and found this interesting
+assembly instructions. As you can see these instructions resemble a pattern for decrypting encrypted data.
+
+<img src="picture/InterestingFn.png" width="600" height="480">
+<br>
+<br>
+
+Following the call to the sub_1249, I figured out that this is indeed a decryptor to the encrypted data on the stack.
+
+<br>
+
+I cleaned the function and the final pseudocode looks like this.
+
+<br>
+
+<img src="picture/XorEncryption.png" width="600" height="400">
+
+<br>
+<br>
+
+
+
+Looking at the function again, it seems possible to rewrite this entire function and call the decryptor ourselves.
+<br>
+
+All we have to do is figure out how the program calls the decryptor.
+it's being called like this:
+<br>
+<br>
+
+<img src="picture/XorEncryptionCall.png" width="600" height="250">
+
+<br>
+<br>
+
+Notice how the v4 local variable is allocated?
+if you look at the v5 variable it's not being used anywhere nor there's references to it being used but don't be fooled the program is actually
+using the variable on the stack.
+
+<br>
+
+<img src="picture/StackAllocation.png" width="1280" height="600">
+
+<br>
+<br>
+
+0x141E - 0x1416 = 0x8 which means they are passing string here or a const char* data type.<br>
+Although ida says that v5 is not used anywhere on the program, i disagree because if you remember the strlen call inside the decryptor?<br>
+if they're passing the memory on rax and rbp+1416h is not null or it has a valid string value then
+it will also be included as parameter on the memory.<br>
+
+Now after rewriting the function into c++ we can simply pass the hexadecimal address there.<br>
+
+<img src="picture/DecryptionPoC.png" width="700" height="400">
+
+<br>
+<br>
+
+Note: I only decrypted the 1st, 2nd and last encrypted string since they're easy to decrypt.<br>
+
+At this point, I noticed a clear pattern inside the file.<br>
+The first encrypted string is the first part of the flag.<br>
+The last encrypted string is the last part of the flag.<br>
+The middle part should be somewhere in the middle encrypted data but the memory is allocated on<br>
+runtime so let's try to run the program first and hopefully get an idea.
+
+
+</center>
+</div>
+</div>
+</div>
+
+</body>
+<footer>
+<center>
+&copy zNova
+</center>
+</footer>
+</html>
